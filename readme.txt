@@ -1,4 +1,4 @@
-=== MediaElement.js - HTML5 Video & Audio Player for Wordpress ===
+=== MediaElement.js - HTML5 Video & Audio Player ===
 Contributors: John Dyer
 Donate link: http://mediaelementjs.com/
 Tags: html5, video, audio, player, flash, silverligt, javascript, mp4, mp3, ogg, webm, wmv
@@ -10,22 +10,21 @@ MediaElement.js is an HTML5 video and audio player with Flash/Silverlight fallba
 
 == Description ==
 
-A video plugin for WordPress built on the MediaElementJS HTML5 video and audio player library. Provides Flash or Silverligth fallback players for non-HTML5 browsers and also supports iPhone, iPad, and Andriod.
+A video plugin for WordPress built on the MediaElement.js HTML5 video and audio player library. Provides Flash or Silverligth fallback players for non-HTML5 browsers and also supports iPhone, iPad, and Andriod.
 Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files.
 
-View <a href="http://medialementjs.com/">medialementjs.com</a> for additional information.
+Check out <a href="http://medialementjs.com/">medialementjs.com</a> for more information and examples.
 
 == Installation ==
 
 View [MediaElementJs.com](http://medialementjs.com/) for more information.
 
-This section describes how to install the plugin and get it working.
-
 1. Upload the `medialement-js-wp` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the `Plugins` menu in WordPress
 3. Use the `[video]` or `[audio]` shortcode in your post or page with the following options.
 
-== Video Shortcode Options ==
+Video Shortcode Options
+------------------------------
 
 ### src
 This location of any audio or video file
@@ -83,7 +82,8 @@ All options enabled
 
     [video mp4="http://mysite.com/mymedia.mp4" ogg="http://mysite.com/mymedia.ogg" webm="http://mysite.com/mymedia.webm" poster="http://mysite.com/mymedia.png" preload="true" autoplay="true" width="640" height="264"]
 
-== Audio Shortcode Options ==
+Audio Shortcode Options
+------------------------------
 
 ### src
 This location of any audio file
