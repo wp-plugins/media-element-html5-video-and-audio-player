@@ -6,8 +6,7 @@ Requires at least: 2.8
 Tested up to: 3.0.1
 Stable tag: 1.0
 
-MediaElement.js is an HTML5 video and audio player with Flash/Silverlight fallbacks making it work in all browsers (IE9, IE6+, Firefox, Opera, Safari, Chrome)
-and mobile platforms (iPhone, iPad, Android) with tons of media types (MP4, OGG, WebM, WMV, MP3, WAV, WMA).
+MediaElement.js is an HTML5 video and audio player with Flash fallback. Supports IE, Firefox, Opera, Safari, Chrome and iPhone, iPad, Android.
 
 == Description ==
 
@@ -16,112 +15,108 @@ Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files.
 
 Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more information and examples.
 
-Typical Usage for video
+### Typical Usage for video
 
 	[video src="http://mysite.com/mymedia.mp4" width="640" height="360"]
 
-Video Shortcode Options
-------------------------------
+###  Video Shortcode Options
 
-### src
+= src =
 This location of any audio or video file
     
     [video src="http://mysite.com/mymedia.mp4"]
 
-### mp4
+= mp4 =
 The location of the h.264/MP4 source for the video.
     
     [video mp4="http://mysite.com/mymedia.mp4"]
 
-### ogg
+= ogg =
 The location of the Theora/Ogg source for the video.
 
     [video ogg="http://mysite.com/mymedia.ogg"]
 
-### webm
+= webm =
 The location of the VP8/WebM source for the video.
 
     [video ogg="http://mysite.com/mymedia.webm"]
 
-### poster
+= poster =
 The location of the poster frame for the video.
 
     [video poster="http://mysite.com/mymedia.png"]
 
-### width
+= width =
 The width of the video or audio
 
     [video width="640"]
 
-### height
+= height =
 The height of the video or audio
 
     [video height="264"]
 
-### preload
+= preload =
 Start loading the video as soon as possible, before the user clicks play.
 
     [video preload="true"]
 
-### autoplay
+= autoplay =
 Start playing the video as soon as it's ready.
 
     [video autoplay="true"]
 
-### Simple Video
+= Simple Video =
 Basic playback options
 
     [video src="http://mysite.com/mymedia.mp4" width="640" height="360"]
 
-### All Attributes Video
+= All Attributes Video =
 All options enabled
 
     [video mp4="http://mysite.com/mymedia.mp4" ogg="http://mysite.com/mymedia.ogg" webm="http://mysite.com/mymedia.webm" poster="http://mysite.com/mymedia.png" preload="true" autoplay="true" width="640" height="264"]
 
-Audio Shortcode Options
-------------------------------
+### Audio Shortcode Options 
 
-### src
+= src =
 This location of any audio file
     
     [audio src="http://mysite.com/mymedia.mp3"]
 
-### mp3
+= mp3 =
 The location of the MP3 audio source.
 
     [audio mp3="http://mysite.com/mymedia.mp3"]
 
-### ogg
+= ogg =
 The location of the Vorbis/Ogg source for the audio 
 
     [video ogg="http://mysite.com/mymedia.ogg"]
 
-### webm
+= webm =
 The location of the VP8/WebM source for the audio 
 
     [video ogg="http://mysite.com/mymedia.webm"]
 
-### preload
+= preload =
 Start loading the audio as soon as possible, before the user clicks play.
 
     [video preload="true"]
 
-### autoplay
+= autoplay =
 Start playing the audio as soon as it's ready.
 
     [video autoplay="true"]
 
-### Simple Audio
+= Simple Audio =
 Basic playback options
 
     [audio src="http://mysite.com/mymedia.mp3"]
 
-### All Attributes Audio
+= All Attributes Audio =
 All options enabled
 
     [audio mp3="http://mysite.com/mymedia.mp3" ogg="http://mysite.com/mymedia.ogg" preload="true" autoplay="true"]
-
-
 
 == Installation ==
 
