@@ -1,19 +1,20 @@
 === MediaElement.js - HTML5 Video & Audio Player ===
-Contributors: John Dyer
+Contributors: johndyer
 Donate link: http://mediaelementjs.com/
-Tags: html5, video, audio, player, flash, silverligt, javascript, mp4, mp3, ogg, webm, wmv
+Tags: html5, video, audio, player, flash, Silverlight, javascript, mp4, mp3, ogg, webm, wmv
 Requires at least: 2.8
 Tested up to: 3.0.1
 Stable tag: 1.0
 
-MediaElement.js is an HTML5 video and audio player with Flash/Silverlight fallbacks making it work in all browsers and mobile platforms.
+MediaElement.js is an HTML5 video and audio player with Flash/Silverlight fallbacks making it work in all browsers (IE9, IE6+, Firefox, Opera, Safari, Chrome)
+and mobile platforms (iPhone, iPad, Android) with tons of media types (MP4, OGG, WebM, WMV, MP3, WAV, WMA).
 
 == Description ==
 
-A video plugin for WordPress built on the MediaElement.js HTML5 video and audio player library. Provides Flash or Silverligth fallback players for non-HTML5 browsers and also supports iPhone, iPad, and Andriod.
+A video plugin for WordPress built on the MediaElement.js HTML5 video and audio player library. Provides Flash or Silverlight fallback players for non-HTML5 browsers and also supports iPhone, iPad, and Andriod.
 Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files.
 
-Check out <a href="http://medialementjs.com/">medialementjs.com</a> for more information and examples.
+Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more information and examples.
 
 Typical Usage for video
 
@@ -124,13 +125,11 @@ All options enabled
 
 == Installation ==
 
-View [MediaElementJs.com](http://medialementjs.com/) for more information.
+View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more information.
 
 1. Upload the `medialement-js-wp` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the `Plugins` menu in WordPress
-3. Use the `[video]` or `[audio]` shortcode in your post or page with the following options.
-
-
+3. Use the `[video]` or `[audio]` shortcode in your post or page with the options on the front page.
 
 == Changelog ==
 
