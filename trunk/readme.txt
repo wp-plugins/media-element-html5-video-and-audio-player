@@ -15,13 +15,9 @@ Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files.
 
 Check out <a href="http://medialementjs.com/">medialementjs.com</a> for more information and examples.
 
-== Installation ==
+Typical Usage for video
 
-View [MediaElementJs.com](http://medialementjs.com/) for more information.
-
-1. Upload the `medialement-js-wp` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the `Plugins` menu in WordPress
-3. Use the `[video]` or `[audio]` shortcode in your post or page with the following options.
+	[video src="http://mysite.com/mymedia.mp4" width="640" height="360"]
 
 Video Shortcode Options
 ------------------------------
@@ -30,7 +26,6 @@ Video Shortcode Options
 This location of any audio or video file
     
     [video src="http://mysite.com/mymedia.mp4"]
-
 
 ### mp4
 The location of the h.264/MP4 source for the video.
@@ -124,6 +119,17 @@ Basic playback options
 All options enabled
 
     [audio mp3="http://mysite.com/mymedia.mp3" ogg="http://mysite.com/mymedia.ogg" preload="true" autoplay="true"]
+
+
+
+== Installation ==
+
+View [MediaElementJs.com](http://medialementjs.com/) for more information.
+
+1. Upload the `medialement-js-wp` folder to the `/wp-content/plugins/` directory
+2. Activate the plugin through the `Plugins` menu in WordPress
+3. Use the `[video]` or `[audio]` shortcode in your post or page with the following options.
+
 
 
 == Changelog ==
