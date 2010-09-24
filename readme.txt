@@ -139,7 +139,11 @@ None
 
 = Where can I find out more? =
 
-Check out http://mediaelementjs.com/(http://mediaelementjs.com/)
+Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more examples
+
+= What does this get me over other HTML5 players? =
+
+See original blog post at <a href="http://johndyer.name/post/MediaElement-js-a-magic-unicorn-HTML5-video-library.aspx">johndyer.name</a> for a full explanation of MediaElement.js
 
 == Screenshots  ==
 
