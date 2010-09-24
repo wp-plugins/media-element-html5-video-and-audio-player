@@ -6,7 +6,7 @@ Requires at least: 2.8
 Tested up to: 3.0.1
 Stable tag: 1.0
 
-MediaElement.js is an HTML5 video and audio player with fall Flash/Silverlight fallbacks making it work in all browsers and mobile platforms.
+MediaElement.js is an HTML5 video and audio player with Flash/Silverlight fallbacks making it work in all browsers and mobile platforms.
 
 == Description ==
 
