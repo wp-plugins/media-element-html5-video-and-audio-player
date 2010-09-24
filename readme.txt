@@ -130,3 +130,17 @@ All options enabled
 
 = 1.0 =
 * First release.
+
+== Upgrade Notice ==
+
+None
+
+== Frequently Asked Questions ==
+
+= Where can I find out more? =
+
+Check out http://mediaelementjs.com/(http://mediaelementjs.com/)
+
+== Screenshots  ==
+
+1. Video player
