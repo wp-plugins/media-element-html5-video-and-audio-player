@@ -122,7 +122,7 @@ All options enabled
 
 View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more information.
 
-1. Upload the `medialement-js-wp` folder to the `/wp-content/plugins/` directory
+1. Upload the `media-element-html5-video-and-audio-player` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the `Plugins` menu in WordPress
 3. Use the `[video]` or `[audio]` shortcode in your post or page with the options on the front page.
 
