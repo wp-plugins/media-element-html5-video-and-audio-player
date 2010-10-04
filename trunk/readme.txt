@@ -128,6 +128,11 @@ View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more inform
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed URL bug
+* Fixed non-src bugs
+
+
 = 1.0 =
 * First release.
 
