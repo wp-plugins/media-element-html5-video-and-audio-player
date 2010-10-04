@@ -1,7 +1,7 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
@@ -91,7 +91,7 @@ function add_mediaelementjs_header(){
 	$defaultVideoWidth = get_option('mep_default_video_width');
 	$defaultVideoHeight = get_option('mep_default_video_height');
 
-  $dir = WP_PLUGIN_URL.'/mediaelement-js-wp/mediaelement/';
+  $dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
   echo <<<_end_
   <link rel="stylesheet" href="{$dir}mediaelementplayer.css" type="text/css" media="screen" charset="utf-8" />
   <script src="{$dir}mediaelement.js" type="text/javascript"></script>
@@ -129,15 +129,15 @@ function video_shortcode($atts){
   }  
   
   if ($mp4) {
-    $mp4_source = '<source src="'.$mp4.'" type=\'video/mp4"\'>';
+    $mp4_source = '<source src="'.$mp4.'" type="video/mp4" />';
   }
 
   if ($webm) {
-    $webm_source = '<source src="'.$webm.'" type=\'video/webm"\'>';
+    $webm_source = '<source src="'.$webm.'" type="video/webm" />';
   }
 
   if ($ogg) {
-    $ogg_source = '<source src="'.$ogg.'" type=\'video/ogg"\'>';
+    $ogg_source = '<source src="'.$ogg.'" type="video/ogg" />';
   }
   
   if ($width) {
@@ -198,15 +198,15 @@ function audio_shortcode($atts){
   }    
 
   if ($mp3) {
-    $mp3_source = '<source src="'.$mp3.'" type=\'audio/mp3"\'>';
+    $mp3_source = '<source src="'.$mp3.'" type="audio/mp3" />';
   }
 
   if ($webm) {
-    $webm_source = '<source src="'.$webm.'" type=\'audio/webm"\'>';
+    $webm_source = '<source src="'.$webm.'" type="audio/webm" />';
   }
 
   if ($ogg) {
-    $ogg_source = '<source src="'.$ogg.'" type=\'audio/ogg"\'>';
+    $ogg_source = '<source src="'.$ogg.'" type="audio/ogg" />';
   }
 
   if ($poster) {
