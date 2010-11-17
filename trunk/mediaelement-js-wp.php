@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 1.0.5
+ * @version 1.1.0
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 1.0.5
+Version: 1.1.0
 Author URI: http://johndyer.name
 License: GPLv3, MIT
 */
@@ -88,22 +88,34 @@ function mep_settings_page() {
 }
 
 function add_mediaelementjs_header(){
+
+
+	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
+	
+	echo <<<_end_
+<link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css" media="screen" charset="utf-8" />
+<script src="{$dir}mediaelement.min.js" type="text/javascript"></script>
+<script src="{$dir}mediaelementplayer.min.js" type="text/javascript"></script>
+_end_;
+}
+
+// If this happens in the <head> tag it fails in iOS. Boo.
+function add_mediaelementjs_footer(){
 	$defaultVideoWidth = get_option('mep_default_video_width');
 	$defaultVideoHeight = get_option('mep_default_video_height');
 
-  $dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
-  echo <<<_end_
-  <link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css" media="screen" charset="utf-8" />
-  <script src="{$dir}mediaelement.min.js" type="text/javascript"></script>
-  <script src="{$dir}mediaelementplayer.min.js" type="text/javascript"></script>
-  <script type="text/javascript" charset="utf-8">
-  jQuery(document).ready(function($) {
-		$('video[class=mep],audio[class=mep]').mediaelementplayer({defaultVideoWidth:{$defaultVideoWidth},defaultVideoHeight:{$defaultVideoHeight}});
-  });
-  </script>
+	echo <<<_end_
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$('video[class=mep],audio[class=mep]').mediaelementplayer({defaultVideoWidth:{$defaultVideoWidth},defaultVideoHeight:{$defaultVideoHeight}});
+});
+</script>
 _end_;
 }
+
+
 add_action('wp_head','add_mediaelementjs_header');
+add_action('wp_footer','add_mediaelementjs_footer');
 
 function video_shortcode($atts){
   extract(shortcode_atts(array(
