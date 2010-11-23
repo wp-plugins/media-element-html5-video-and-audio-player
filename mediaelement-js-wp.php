@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 1.1.5
+ * @version 1.1.5.1
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 1.1.5
+Version: 1.1.5.1
 Author URI: http://johndyer.name
 License: GPLv3, MIT
 */
@@ -174,13 +174,13 @@ function media_shortcode($tagName, $atts){
 		'width' => '',
 		'height' => '',
 		'type' => get_option('mep_default_'.$tagName.'_type'),
-		'preload' => false,
-		'autoplay' => false,
-		'loop' => false,
-		'duration' => true,
-		'progress' => true,
-		'fullscreen' => true,
-		'volume' => true,
+		'preload' => 'false',
+		'autoplay' => 'false',
+		'loop' => 'false',
+		'duration' => 'true',
+		'progress' => 'true',
+		'fullscreen' => 'true',
+		'volume' => 'true',
 		'captions' => '',
 		'captionslang' => 'en'
 	), $atts));
@@ -238,8 +238,8 @@ function media_shortcode($tagName, $atts){
 	}
 
 	// CONTROLS
-	if (!$fullscreen || !$duration || !$progress || !$volume) {
-		$controls_options = ',{controls: {fullscreen: '.$fullscreen.',duration: '.$duration.',progress: '.$progress.',volume: '.$volume.'}}';
+	if ($fullscreen != 'true' || $duration  != 'true'  || $progress != 'true'  || $volume != 'true' ) {
+		$controls_option = ',controls: {fullscreen: '.$fullscreen.',duration: '.$duration.',progress: '.$progress.',volume: '.$volume.'}';
 	}
 
 	$defaultVideoWidth = get_option('mep_default_video_width');
