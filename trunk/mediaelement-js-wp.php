@@ -1,15 +1,15 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 1.1.5.1
+ * @version 2.0.1
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 1.1.5.1
-Author URI: http://johndyer.name
+Version: 2.0.1
+Author URI: http://johndyer.me/
 License: GPLv3, MIT
 */
 
@@ -137,8 +137,7 @@ function add_mediaelementjs_header(){
 	
 	echo <<<_end_
 <link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css" media="screen" charset="utf-8" />
-<script src="{$dir}mediaelement.min.js" type="text/javascript"></script>
-<script src="{$dir}mediaelementplayer.min.js" type="text/javascript"></script>
+<script src="{$dir}mediaelement-and-player.min.js" type="text/javascript"></script>
 _end_;
 }
 
@@ -174,13 +173,17 @@ function media_shortcode($tagName, $atts){
 		'width' => '',
 		'height' => '',
 		'type' => get_option('mep_default_'.$tagName.'_type'),
-		'preload' => 'false',
+		'preload' => 'none',
 		'autoplay' => 'false',
 		'loop' => 'false',
+		
+		// old ones
 		'duration' => 'true',
 		'progress' => 'true',
 		'fullscreen' => 'true',
 		'volume' => 'true',
+		
+		// captions
 		'captions' => '',
 		'captionslang' => 'en'
 	), $atts));
@@ -238,9 +241,17 @@ function media_shortcode($tagName, $atts){
 	}
 
 	// CONTROLS
-	if ($fullscreen != 'true' || $duration  != 'true'  || $progress != 'true'  || $volume != 'true' ) {
-		$controls_option = ',controls: {fullscreen: '.$fullscreen.',duration: '.$duration.',progress: '.$progress.',volume: '.$volume.'}';
-	}
+	$controls_option = ",features: ['playpause'";
+	if ($progress == 'true')
+		$controls_option .= ",'progress'";
+	if ($duration == 'true')
+		$controls_option .= ",'current','duration'";
+	if ($volume == 'true')
+		$controls_option .= ",'volume'";
+	$controls_option .= ",'tracks'";
+	if ($fullscreen == 'true')
+		$controls_option .= ",'fullscreen'";		
+	$controls_option .= "]";
 
 	$defaultVideoWidth = get_option('mep_default_video_width');
 	$defaultVideoHeight = get_option('mep_default_video_height');
