@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.0.1
+ * @version 2.0.1.1
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.0.1
+Version: 2.0.1.1
 Author URI: http://johndyer.me/
 License: GPLv3, MIT
 */
@@ -161,7 +161,7 @@ _end_;
 add_action('wp_head','add_mediaelementjs_header');
 add_action('wp_footer','add_mediaelementjs_footer');
 
-function media_shortcode($tagName, $atts){
+function mejs_media_shortcode($tagName, $atts){
 	extract(shortcode_atts(array(
 		'src' => '',  
 		'mp4' => '',
@@ -174,7 +174,7 @@ function media_shortcode($tagName, $atts){
 		'height' => '',
 		'type' => get_option('mep_default_'.$tagName.'_type'),
 		'preload' => 'none',
-		'autoplay' => 'false',
+		'autoplay' => '',
 		'loop' => 'false',
 		
 		// old ones
@@ -229,11 +229,11 @@ function media_shortcode($tagName, $atts){
 	}
 
 	if ($preload) {
-		$preload_attribute = 'preload="preload"';
+		$preload_attribute = 'preload="'.$preload.'"';
 	}
 
 	if ($autoplay) {
-		$autoplay_attribute = 'autoplay="autoplay"';
+		$autoplay_attribute = 'autoplay="'.$autoplay.'"';
 	}
 
 	if ($loop) {
@@ -285,15 +285,23 @@ _end_;
 
 
 
-function audio_shortcode($atts){
-	return media_shortcode('audio',$atts);
+function mejs_audio_shortcode($atts){
+	return mejs_media_shortcode('audio',$atts);
 }
-function video_shortcode($atts){
-	return media_shortcode('video',$atts);
+function mejs_video_shortcode($atts){
+	return mejs_media_shortcode('video',$atts);
 }
 
-add_shortcode('audio', 'audio_shortcode');
-add_shortcode('video', 'video_shortcode');
+add_shortcode('audio', 'mejs_audio_shortcode');
+add_shortcode('video', 'mejs_video_shortcode');
 	
 
+function mejs_init() {
+    
+	wp_enqueue_script( 'jquery' );
+    
+}    
+ 
+add_action('init', 'mejs_init');
+	
 ?>
