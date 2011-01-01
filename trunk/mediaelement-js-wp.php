@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.0.1.1
+ * @version 2.0.1.2
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.0.1.1
+Version: 2.0.1.2
 Author URI: http://johndyer.me/
 License: GPLv3, MIT
 */
@@ -20,9 +20,9 @@ Adapted from: http://videojs.com/ plugin
 $mediaElementPlayerIndex = 1;
 
 /* Runs when plugin is activated */
-register_activation_hook(__FILE__,'mep_install'); 
+register_activation_hook(__FILE__,'mejs_install'); 
 
-function mep_install() {
+function mejs_install() {
 	add_option('mep_default_video_height', 270);
 	add_option('mep_default_video_width', 480);
 	add_option('mep_default_video_type', '');
@@ -30,8 +30,8 @@ function mep_install() {
 }
 
 /* Runs on plugin deactivation*/
-register_deactivation_hook( __FILE__, 'mep_remove' );
-function mep_remove() {
+register_deactivation_hook( __FILE__, 'mejs_remove' );
+function mejs_remove() {
 	delete_option('mep_default_video_height');
 	delete_option('mep_default_video_width');
 	delete_option('mep_default_video_type');
@@ -39,19 +39,19 @@ function mep_remove() {
 }
 
 // create custom plugin settings menu
-add_action('admin_menu', 'mep_create_menu');
+add_action('admin_menu', 'mejs_create_menu');
 
-function mep_create_menu() {
+function mejs_create_menu() {
 
 	//create new top-level menu
-	add_options_page('MediaElement Settings', 'MediaElement Settings', 'administrator', __FILE__, 'mep_settings_page');
+	add_options_page('MediaElement.js Settings', 'MediaElement.js Settings', 'administrator', __FILE__, 'mejs_settings_page');
 
 	//call register settings function
-	add_action( 'admin_init', 'register_mysettings' );
+	add_action( 'admin_init', 'mejs_register_settings' );
 }
 
 
-function register_mysettings() {
+function mejs_register_settings() {
 	//register our settings
 	register_setting( 'mep_settings', 'mep_default_video_height' );
 	register_setting( 'mep_settings', 'mep_default_video_width' );
@@ -60,7 +60,7 @@ function register_mysettings() {
 }
 
 
-function mep_settings_page() {
+function mejs_settings_page() {
 ?>
 <div class="wrap">
 <h2>MediaElement.js HTML5 Player Options</h2>
@@ -130,7 +130,7 @@ function mep_settings_page() {
 <?php
 }
 
-function add_mediaelementjs_header(){
+function mejs_add_header(){
 
 
 	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
@@ -142,7 +142,7 @@ _end_;
 }
 
 // If this happens in the <head> tag it fails in iOS. Boo.
-function add_mediaelementjs_footer(){
+function mejs_add_footer(){
 /*
 	$defaultVideoWidth = get_option('mep_default_video_width');
 	$defaultVideoHeight = get_option('mep_default_video_height');
@@ -158,10 +158,14 @@ _end_;
 }
 
 
-add_action('wp_head','add_mediaelementjs_header');
-add_action('wp_footer','add_mediaelementjs_footer');
+add_action('wp_head','mejs_add_header');
+add_action('wp_footer','mejs_add_footer');
 
 function mejs_media_shortcode($tagName, $atts){
+
+	global $mediaElementPlayerIndex;	
+	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
+
 	extract(shortcode_atts(array(
 		'src' => '',  
 		'mp4' => '',
@@ -170,12 +174,12 @@ function mejs_media_shortcode($tagName, $atts){
 		'webm' => '',
 		'ogg' => '',
 		'poster' => '',
-		'width' => '',
-		'height' => '',
+		'width' => get_option('mep_default_video_width'),
+		'height' => get_option('mep_default_video_height'),
 		'type' => get_option('mep_default_'.$tagName.'_type'),
 		'preload' => 'none',
 		'autoplay' => '',
-		'loop' => 'false',
+		'loop' => '',
 		
 		// old ones
 		'duration' => 'true',
@@ -194,14 +198,17 @@ function mejs_media_shortcode($tagName, $atts){
 
 	if ($src) {
 		$src_attribute = 'src="'.$src.'"';
+		$flash_src = $src;
 	}
 
 	if ($mp4) {
 		$mp4_source = '<source src="'.$mp4.'" type="'.$tagName.'/mp4" />';
+		$flash_src = $mp4;
 	}
 	
 	if ($mp3) {
 		$mp3_source = '<source src="'.$mp3.'" type="'.$tagName.'/mp3" />';
+		$flash_src = $mp3;
 	}	
 
 	if ($webm) {
@@ -237,7 +244,7 @@ function mejs_media_shortcode($tagName, $atts){
 	}
 
 	if ($loop) {
-		$loop_option = ', loop: true';
+		$loop_option = ', loop: ' . $loop;
 	}
 
 	// CONTROLS
@@ -253,9 +260,6 @@ function mejs_media_shortcode($tagName, $atts){
 		$controls_option .= ",'fullscreen'";		
 	$controls_option .= "]";
 
-	$defaultVideoWidth = get_option('mep_default_video_width');
-	$defaultVideoHeight = get_option('mep_default_video_height');
-	global $mediaElementPlayerIndex;
 
 	$videohtml .= <<<_end_
 	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" {$src_attribute} {$type_attribute} {$width_attribute} {$height_attribute} {$poster_attribute} controls="controls" {$preload_attribute} {$autoplay_attribute}>
@@ -264,12 +268,15 @@ function mejs_media_shortcode($tagName, $atts){
 		{$webm_source}
 		{$ogg_source}
 		{$captions_source}
+		<object width="320" height="240" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
+			<param name="movie" value="{$dir}flashmediaelement.swf" />
+			<param name="flashvars" value="controls=true&file={$flash_src}" />			
+		</object>		
 	</{$tagName}>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	$('#wp_mep_$mediaElementPlayerIndex').mediaelementplayer({
-		defaultVideoWidth:{$defaultVideoWidth}
-		,defaultVideoHeight:{$defaultVideoHeight}
+		m:1
 		{$loop_option}
 		{$controls_option}
 	});
