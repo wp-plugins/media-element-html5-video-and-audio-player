@@ -172,6 +172,7 @@ function mejs_media_shortcode($tagName, $atts){
 		'mp3' => '',
 		'wmv' => '',    
 		'webm' => '',
+		'flv' => '',
 		'ogg' => '',
 		'poster' => '',
 		'width' => get_option('mep_default_video_width'),
@@ -218,6 +219,15 @@ function mejs_media_shortcode($tagName, $atts){
 	if ($ogg) {
 		$ogg_source = '<source src="'.$ogg.'" type="'.$tagName.'/ogg" />';
 	}
+	
+	if ($flv) {
+		$flv_source = '<source src="'.$flv.'" type="'.$tagName.'/flv" />';
+	}	
+
+	if ($wmv) {
+		$wmv_source = '<source src="'.$wmv.'" type="'.$tagName.'/wmv" />';
+	}	
+
 
 	if ($captions) {
 		$captions_source = '<track src="'.$captions.'" kind="subtitles" srclang="'.$captionslang.'" />';
@@ -266,6 +276,8 @@ function mejs_media_shortcode($tagName, $atts){
 		{$mp4_source}
 		{$mp3_source}
 		{$webm_source}
+		{$flv_source}
+		{$wmv_source}
 		{$ogg_source}
 		{$captions_source}
 		<object width="320" height="240" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
