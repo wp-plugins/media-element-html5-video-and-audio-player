@@ -140,6 +140,16 @@ View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more inform
 
 == Changelog ==
 
+= 2.0.1.2 =
+* Loop fix
+* Video for Everybody Syntax (Works even when JavaScript is turned off)
+
+= 2.0.1.1 =
+* Autoplay fix
+
+= 2.0.1 =
+* Updated to 2.0.1 version
+
 = 1.1.5 =
 * Updated to 1.1.5 version
 * Added options to turn controls on/off
