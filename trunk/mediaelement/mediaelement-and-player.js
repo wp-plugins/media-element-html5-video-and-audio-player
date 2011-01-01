@@ -15,7 +15,7 @@
 var mejs = mejs || {};
 
 // version number
-mejs.version = '2.0.0';
+mejs.version = '2.0.2';
 
 // player number (for missing, same id attr)
 mejs.meIndex = 0;
@@ -36,7 +36,7 @@ Utility methods
 */
 mejs.Utility = {	
 	encodeUrl: function(url) {
-		return url.replace(/\?/gi,'%3F').replace(/=/gi,'%3D').replace(/&/gi,'%26');
+		return encodeURIComponent(url); //.replace(/\?/gi,'%3F').replace(/=/gi,'%3D').replace(/&/gi,'%26');
 	},
 	escapeHTML: function(s) {
 		return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
@@ -265,9 +265,10 @@ mejs.HtmlMediaElement = {
 /*
 Mimics the <video/audio> element by calling Flash's External Interface or Silverlights [ScriptableMember]
 */
-mejs.PluginMediaElement = function (pluginid, pluginType) {
+mejs.PluginMediaElement = function (pluginid, pluginType, mediaUrl) {
 	this.id = pluginid;
 	this.pluginType = pluginType;
+	this.src = mediaUrl;
 	this.events = {};
 };
 
@@ -348,6 +349,7 @@ mejs.PluginMediaElement.prototype = {
 	setSrc: function (url) {
 		if (typeof url == 'string') {
 			this.pluginApi.setSrc(mejs.Utility.absolutizeUrl(url));
+			this.src = mejs.Utility.absolutizeUrl(url);
 		} else {
 			var i, media;
 			
@@ -355,6 +357,7 @@ mejs.PluginMediaElement.prototype = {
 				media = url[i];
 				if (this.canPlayType(media.type)) {
 					this.pluginApi.setSrc(mejs.Utility.absolutizeUrl(media.src));
+					this.src = mejs.Utility.absolutizeUrl(url);
 				}
 			}			
 		}	
@@ -507,6 +510,8 @@ mejs.MediaElementDefaults = {
 	pluginPath: mejs.Utility.getScriptPath(['mediaelement.js','mediaelement.min.js','mediaelement-and-player.js','mediaelement-and-player.min.js']),
 	// name of flash file
 	flashName: 'flashmediaelement.swf',
+	// turns on the smoothing filter in Flash
+	enablePluginSmoothing: false,
 	// name of silverlight file
 	silverlightName: 'silverlightmediaelement.xap',
 	// default if the <video width> is not specified
@@ -555,7 +560,7 @@ mejs.HtmlMediaElementShim = {
 		// check for real poster
 		poster = (typeof poster == 'undefined' || poster === null) ? '' : poster;
 		preload = (typeof preload == 'undefined' || preload === null || preload === 'false') ? 'none' : preload;
-		autoplay = (typeof autoplay == 'undefined' || autoplay === null || autoplay === 'false') ? '' : autoplay;
+		autoplay = !(typeof autoplay == 'undefined' || autoplay === null || autoplay === 'false');
 		
 		// test for HTML5 and plugin capabilities
 		playback = this.determinePlayback(htmlMediaElement, options, isVideo, supportsMediaTag);
@@ -704,7 +709,7 @@ mejs.HtmlMediaElementShim = {
 		var width = 1,
 			height = 1,
 			pluginid = 'me_' + pluginType + '_' + (mejs.meIndex++),
-			pluginMediaElement = new mejs.PluginMediaElement(pluginid, pluginType),
+			pluginMediaElement = new mejs.PluginMediaElement(pluginid, pluginType, mediaUrl),
 			container = document.createElement('div'),
 			node,
 			initVars;
@@ -741,8 +746,8 @@ mejs.HtmlMediaElementShim = {
 		initVars = [
 			'id=' + pluginid,
 			'poster=' + poster,
-			'isvideo=' + isVideo.toString(),
-			'autoplay=' + autoplay,
+			'isvideo=' + ((isVideo) ? "true" : "false"),
+			'autoplay=' + ((autoplay) ? "true" : "false"),
 			'preload=' + preload,
 			'width=' + width,			
 			'timerrate=' + options.timerRate,
@@ -753,6 +758,9 @@ mejs.HtmlMediaElementShim = {
 		}
 		if (options.enablePluginDebug) {
 			initVars.push('debug=true');
+		}
+		if (options.enablePluginSmoothing) {
+			initVars.push('smoothing=true');
 		}
 		
 		switch (pluginType) {
@@ -779,7 +787,7 @@ mejs.HtmlMediaElementShim = {
 '<param name="quality" value="high" />' +
 '<param name="bgcolor" value="#000000" />' +
 '<param name="wmode" value="transparent" />' +
-'<param name="allowScriptAccess" value="sameDomain" />' +
+'<param name="allowScriptAccess" value="always" />' +
 '<param name="allowFullScreen" value="true" />' +
 '</object>';
 
@@ -792,7 +800,7 @@ mejs.HtmlMediaElementShim = {
 'quality="high" ' +
 'bgcolor="#000000" ' +
 'wmode="transparent" ' +
-'allowScriptAccess="sameDomain" ' +
+'allowScriptAccess="always" ' +
 'allowFullScreen="true" ' +
 'type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" ' +
 'src="' + options.pluginPath + options.flashName + '?' + initVars.join('&') + '" ' +
@@ -878,7 +886,7 @@ window.MediaElement = mejs.MediaElement;
 		// resize to media dimensions
 		enableAutosize: true,		
 		// features to show
-		features: ['playpause','progress','current','duration','tracks','volume','fullscreen']
+		features: ['playpause','current','progress','duration','tracks','volume','fullscreen']
 	};
 
 	mejs.mepIndex = 0;
@@ -1322,8 +1330,7 @@ window.MediaElement = mejs.MediaElement;
 				
 					current.width(newWidth);
 					handle.css('left', handlePos);
-					timefloat.css('left', handlePos);
-					timefloatcurrent.html( mejs.Utility.secondsToTimeCode(media.currentTime) );
+
 				}				
 			
 			},
@@ -1332,20 +1339,46 @@ window.MediaElement = mejs.MediaElement;
 				var x = e.pageX,
 					offset = total.offset(),
 					width = total.outerWidth(),
-					percentage = ((x - offset.left) / width),
+					percentage = 0,
+					newTime = 0;						
+					
+				
+				if (x > offset.left && x <= width + offset.left) {					
+					percentage = ((x - offset.left) / width);
 					newTime = percentage * media.duration;
-
-				media.setCurrentTime(newTime);
+					
+					// seek to where the mouse is
+					if (mouseIsDown) {
+						media.setCurrentTime(newTime);					
+					}
+					
+					// position floating time box
+					var pos = x - offset.left;
+					timefloat.css('left', pos);
+					timefloatcurrent.html( mejs.Utility.secondsToTimeCode(newTime) );					
+				}
+				
+				
+				
 			},
-			mouseIsDown = false;
+			mouseIsDown = false,
+			mouseIsOver = false;
 	
 		// handle clicks
 		//controls.find('.mejs-time-rail').delegate('span', 'click', handleMouseMove);
 		total
 			.bind('mousedown', function (e) {
-				handleMouseMove(e);
 				mouseIsDown = true;
+				handleMouseMove(e);				
 				return false;
+			});		
+
+		controls.find('.mejs-time-rail')
+			.bind('mouseenter', function(e) {
+				mouseIsOver = true;
+			})		
+			.bind('mouseleave',function(e) {
+				mouseIsOver = false;
 			});
 			
 		$(document)
@@ -1354,7 +1387,7 @@ window.MediaElement = mejs.MediaElement;
 				//handleMouseMove(e);
 			})
 			.bind('mousemove', function (e) {
-				if (mouseIsDown) {
+				if (mouseIsDown || mouseIsOver) {
 					handleMouseMove(e);
 				}
 			});		
