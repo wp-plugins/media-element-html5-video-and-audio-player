@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.0.4
+ * @version 2.0.5
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: A video and audio plugin for WordPress built on MediaElement HTML5 video and audio player library. Embeds video or audio in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.0.4
+Version: 2.0.5
 Author URI: http://johndyer.me/
 License: GPLv3, MIT
 */
@@ -136,7 +136,7 @@ function mejs_add_header(){
 	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
 	
 	echo <<<_end_
-<link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css"  />
 <script src="{$dir}mediaelement-and-player.min.js" type="text/javascript"></script>
 _end_;
 }
@@ -198,34 +198,34 @@ function mejs_media_shortcode($tagName, $atts){
 	}
 
 	if ($src) {
-		$src_attribute = 'src="'.$src.'"';
-		$flash_src = $src;
+		$src_attribute = 'src="'.htmlspecialchars($src).'"';
+		$flash_src = htmlspecialchars($src);
 	}
 
 	if ($mp4) {
-		$mp4_source = '<source src="'.$mp4.'" type="'.$tagName.'/mp4" />';
-		$flash_src = $mp4;
+		$mp4_source = '<source src="'.htmlspecialchars($mp4).'" type="'.$tagName.'/mp4" />';
+		$flash_src = htmlspecialchars($mp4);
 	}
 	
 	if ($mp3) {
-		$mp3_source = '<source src="'.$mp3.'" type="'.$tagName.'/mp3" />';
-		$flash_src = $mp3;
+		$mp3_source = '<source src="'.htmlspecialchars($mp3).'" type="'.$tagName.'/mp3" />';
+		$flash_src = htmlspecialchars($mp3);
 	}	
 
 	if ($webm) {
-		$webm_source = '<source src="'.$webm.'" type="'.$tagName.'/webm" />';
+		$webm_source = '<source src="'.htmlspecialchars($webm).'" type="'.$tagName.'/webm" />';
 	}
 
 	if ($ogg) {
-		$ogg_source = '<source src="'.$ogg.'" type="'.$tagName.'/ogg" />';
+		$ogg_source = '<source src="'.htmlspecialchars($ogg).'" type="'.$tagName.'/ogg" />';
 	}
 	
 	if ($flv) {
-		$flv_source = '<source src="'.$flv.'" type="'.$tagName.'/flv" />';
+		$flv_source = '<source src="'.htmlspecialchars($flv).'" type="'.$tagName.'/flv" />';
 	}	
 
 	if ($wmv) {
-		$wmv_source = '<source src="'.$wmv.'" type="'.$tagName.'/wmv" />';
+		$wmv_source = '<source src="'.htmlspecialchars($wmv).'" type="'.$tagName.'/wmv" />';
 	}	
 
 
@@ -233,16 +233,16 @@ function mejs_media_shortcode($tagName, $atts){
 		$captions_source = '<track src="'.$captions.'" kind="subtitles" srclang="'.$captionslang.'" />';
 	}  
 
-	if ($width) {
+	if ($width && $tagName == 'video') {
 		$width_attribute = 'width="'.$width.'"';
 	}
 
-	if ($height) {
+	if ($height && $tagName == 'video') {
 		$height_attribute = 'height="'.$height.'"';
 	}    
 
 	if ($poster) {
-		$poster_attribute = 'poster="'.$poster.'"';
+		$poster_attribute = 'poster="'.htmlspecialchars($poster).'"';
 	}
 
 	if ($preload) {
@@ -282,7 +282,7 @@ function mejs_media_shortcode($tagName, $atts){
 		{$captions_source}
 		<object width="320" height="240" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
 			<param name="movie" value="{$dir}flashmediaelement.swf" />
-			<param name="flashvars" value="controls=true&file={$flash_src}" />			
+			<param name="flashvars" value="controls=true&amp;file={$flash_src}" />			
 		</object>		
 	</{$tagName}>
 <script type="text/javascript">
