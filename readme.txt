@@ -140,6 +140,12 @@ View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more inform
 
 == Changelog ==
 
+= 2.0.6.2 = 
+* Fixed a problem with Wordpress SVN
+
+= 2.0.6 = 
+* Updated to 2.0.6 codebase
+
 = 2.0.5 = 
 * Lots of minor changes to JS code
 * better IE6 support
@@ -193,6 +199,10 @@ None
 Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more examples
 
 = What does this get me over other HTML5 players? =
+
+Most HTML5 players offer one player to modern browsers and then a competely separate Flash player to older browser. This creates an inconsistent look and functionality. 
+
+Instead, MediaElement.js upgrades older browsers, using Flash to mimic the entire HTML5 Media API. Then once all the browsers have something that looks like HTML5 Media, we build a consistent player on top using just HTML and CSS.
 
 See original blog post at <a href="http://johndyer.name/post/MediaElement-js-a-magic-unicorn-HTML5-video-library.aspx">johndyer.name</a> for a full explanation of MediaElement.js
 
