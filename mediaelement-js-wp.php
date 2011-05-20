@@ -1,14 +1,14 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.1.2
+ * @version 2.1.4
  */
 /*
 Plugin Name: MediaElementJS - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: Video and audio plugin for WordPress built on MediaElement.js HTML5 video and audio player library. Embeds media in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.1.2
+Version: 2.1.4
 Author URI: http://johndyer.me/
 License: GPLv3, MIT
 */
@@ -130,8 +130,28 @@ function mejs_settings_page() {
 <?php
 }
 
-function mejs_add_header(){
 
+define('MEDIAELEMENTJS_DIR', WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/');
+// Javascript 
+function mejs_add_scripts(){
+    if (!is_admin()){
+        // the scripts
+        wp_enqueue_script("mediaelementjs-scripts", MEDIAELEMENTJS_DIR ."mediaelement-and-player.min.js", array('jquery'), "2.1.3", false);
+    }
+}
+add_action('wp_print_scripts', 'mejs_add_scripts');
+
+// css
+function mejs_add_styles(){
+    if (!is_admin()){
+        // the style
+        wp_enqueue_style("mediaelementjs-styles", MEDIAELEMENTJS_DIR ."mediaelementplayer.css");
+    }
+}
+add_action('wp_print_styles', 'mejs_add_styles');
+
+function mejs_add_header(){
+/*
 
 	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
 	
@@ -139,6 +159,8 @@ function mejs_add_header(){
 <link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css"  />
 <script src="{$dir}mediaelement-and-player.min.js" type="text/javascript"></script>
 _end_;
+*/
+
 }
 
 // If this happens in the <head> tag it fails in iOS. Boo.
@@ -156,7 +178,6 @@ jQuery(document).ready(function($) {
 _end_;
 */
 }
-
 
 add_action('wp_head','mejs_add_header');
 add_action('wp_footer','mejs_add_footer');
@@ -260,9 +281,9 @@ function mejs_media_shortcode($tagName, $atts){
 	// CONTROLS
 	$controls_option = ",features: ['playpause'";
 	if ($progress == 'true')
-		$controls_option .= ",'progress'";
+		$controls_option .= ",'current','progress'";
 	if ($duration == 'true')
-		$controls_option .= ",'current','duration'";
+		$controls_option .= ",'duration'";
 	if ($volume == 'true')
 		$controls_option .= ",'volume'";
 	$controls_option .= ",'tracks'";
@@ -271,7 +292,7 @@ function mejs_media_shortcode($tagName, $atts){
 	$controls_option .= "]";
 
 
-	$videohtml .= <<<_end_
+	$mediahtml .= <<<_end_
 	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" {$src_attribute} {$type_attribute} {$width_attribute} {$height_attribute} {$poster_attribute} controls="controls" {$preload_attribute} {$autoplay_attribute}>
 		{$mp4_source}
 		{$mp3_source}
@@ -299,7 +320,7 @@ _end_;
 
 	$mediaElementPlayerIndex++;
 
-  return $videohtml;
+  return $mediahtml;
 }
 
 
@@ -312,8 +333,9 @@ function mejs_video_shortcode($atts){
 }
 
 add_shortcode('audio', 'mejs_audio_shortcode');
+add_shortcode('mejsaudio', 'mejs_audio_shortcode');
 add_shortcode('video', 'mejs_video_shortcode');
-	
+add_shortcode('mejsvideo', 'mejs_video_shortcode');	
 
 function mejs_init() {
     
