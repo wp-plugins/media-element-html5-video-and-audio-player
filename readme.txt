@@ -53,7 +53,7 @@ The location of the Theora/Ogg source for the video.
 = webm =
 The location of the VP8/WebM source for the video.
 
-    [video ogg="http://mysite.com/mymedia.webm"]
+    [video webm="http://mysite.com/mymedia.webm"]
 
 = poster =
 The location of the poster frame for the video.
