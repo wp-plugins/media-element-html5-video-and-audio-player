@@ -1,7 +1,7 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.1.5
+ * @version 2.1.7
  */
  
 /*
@@ -9,8 +9,8 @@ Plugin Name: MediaElement.js - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: Video and audio plugin for WordPress built on MediaElement.js HTML5 video and audio player library. Embeds media in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.1.5
-Author URI: http://johndyer.me/
+Version: 2.1.7
+Author URI: http://j.hn/
 License: GPLv3, MIT
 */
 
@@ -24,18 +24,28 @@ $mediaElementPlayerIndex = 1;
 register_activation_hook(__FILE__,'mejs_install'); 
 
 function mejs_install() {
+	add_option('mep_video_skin', '');
+	
 	add_option('mep_default_video_height', 270);
 	add_option('mep_default_video_width', 480);
 	add_option('mep_default_video_type', '');
+	
+	add_option('mep_default_audio_height', 30);
+	add_option('mep_default_audio_width', 400);
 	add_option('mep_default_audio_type', '');
 }
 
 /* Runs on plugin deactivation*/
 register_deactivation_hook( __FILE__, 'mejs_remove' );
 function mejs_remove() {
+	delete_option('mep_video_skin');
+
 	delete_option('mep_default_video_height');
 	delete_option('mep_default_video_width');
-	delete_option('mep_default_video_type');
+	delete_option('mep_default_video_type');	
+
+	delete_option('mep_default_audio_height');
+	delete_option('mep_default_audio_width');
 	delete_option('mep_default_audio_type');
 }
 
@@ -54,9 +64,14 @@ function mejs_create_menu() {
 
 function mejs_register_settings() {
 	//register our settings
+	register_setting( 'mep_settings', 'mep_video_skin' );
+	
 	register_setting( 'mep_settings', 'mep_default_video_height' );
 	register_setting( 'mep_settings', 'mep_default_video_width' );
 	register_setting( 'mep_settings', 'mep_default_video_type' );
+
+	register_setting( 'mep_settings', 'mep_default_audio_height' );
+	register_setting( 'mep_settings', 'mep_default_audio_width' );
 	register_setting( 'mep_settings', 'mep_default_audio_type' );
 }
 
@@ -98,7 +113,19 @@ function mejs_settings_page() {
 			<td >
 				<input name="mep_default_video_type" type="text" id="mep_default_video_type" value="<?php echo get_option('mep_default_video_type'); ?>" /> <span class="description">such as "video/mp4"</span>
 			</td>
-		</tr>		
+		</tr>	
+		<tr valign="top">
+			<th scope="row">
+				<label for="mep_video_skin">Video Skin</label>
+			</th>
+			<td >
+				<select name="mep_video_skin" id="mep_video_skin">
+					<option value="" <?php echo (get_option('mep_video_skin') == '') ? ' selected' : ''; ?>>Default</option>
+					<option value="wmp" <?php echo (get_option('mep_video_skin') == 'wmp') ? ' selected' : ''; ?>>WMP</option>
+					<option value="ted" <?php echo (get_option('mep_video_skin') == 'ted') ? ' selected' : ''; ?>>TED</option>
+				</select>
+			</td>
+		</tr>				
 	</table>
 
 	<h3 class="title"><span>Audio Settings</span></h3>
@@ -106,6 +133,22 @@ function mejs_settings_page() {
 
 	<table  class="form-table">
 		<tr valign="top">
+		<tr valign="top">
+			<th scope="row">
+				<label for="mep_default_audio_width">Default Width</label>
+			</th>
+			<td >
+				<input name="mep_default_audio_width" type="text" id="mep_default_audio_width" value="<?php echo get_option('mep_default_audio_width'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">
+				<label for="mep_default_audio_height">Default Height</label>
+			</th>
+			<td >
+				<input name="mep_default_audio_height" type="text" id="mep_default_audio_height" value="<?php echo get_option('mep_default_audio_height'); ?>" />
+			</td>
+		</tr>			
 			<th scope="row">
 				<label for="mep_default_audio_type">Default Type</label>
 			</th>
@@ -116,7 +159,7 @@ function mejs_settings_page() {
 	</table>
 
 	<input type="hidden" name="action" value="update" />
-	<input type="hidden" name="page_options" value="mep_default_video_width,mep_default_video_height,mep_default_video_type,mep_default_audio_type" />
+	<input type="hidden" name="page_options" value="mep_default_video_width,mep_default_video_height,mep_default_video_type,mep_default_audio_type,mep_default_audio_width,mep_default_audio_height,mep_video_skin" />
 
 	<p>
 		<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -147,6 +190,10 @@ function mejs_add_styles(){
     if (!is_admin()){
         // the style
         wp_enqueue_style("mediaelementjs-styles", MEDIAELEMENTJS_DIR ."mediaelementplayer.css");
+        
+        if (get_option('mep_video_skin') != '') {
+			wp_enqueue_style("mediaelementjs-skins", MEDIAELEMENTJS_DIR ."mejs-skins.css");
+		}
     }
 }
 add_action('wp_print_styles', 'mejs_add_styles');
@@ -197,10 +244,11 @@ function mejs_media_shortcode($tagName, $atts){
 		'flv' => '',
 		'ogg' => '',
 		'poster' => '',
-		'width' => get_option('mep_default_video_width'),
-		'height' => get_option('mep_default_video_height'),
+		'width' => get_option('mep_default_'.$tagName.'_width'),
+		'height' => get_option('mep_default_'.$tagName.'_height'),
 		'type' => get_option('mep_default_'.$tagName.'_type'),
 		'preload' => 'none',
+		'skin' => get_option('mep_video_skin'),
 		'autoplay' => '',
 		'loop' => '',
 		
@@ -219,10 +267,82 @@ function mejs_media_shortcode($tagName, $atts){
 		$type_attribute = 'type="'.$type.'"';
 	}
 
+/*
 	if ($src) {
 		$src_attribute = 'src="'.htmlspecialchars($src).'"';
 		$flash_src = htmlspecialchars($src);
 	}
+*/
+
+	if ($src) {
+	
+		// does it have an extension?
+		if (substr($src, strlen($src)-4, 1)=='.') {
+			$src_attribute = 'src="'.htmlspecialchars($src).'"';
+			$flash_src = htmlspecialchars($src);
+		} else {
+			
+			// for missing extension, we try to find all possible files in the system
+			
+			if (substr($src, 0, 4)!='http') 
+				$filename = WP_CONTENT_DIR . substr($src, strlen(WP_CONTENT_DIR)-strrpos(WP_CONTENT_DIR, '/'));
+			else 
+				$filename = WP_CONTENT_DIR . substr($src, strlen(WP_CONTENT_URL));
+
+			if ($tagName == 'video') {
+				// MP4
+				if (file_exists($filename.'.mp4')) {
+					$mp4=$src.'.mp4';
+				} elseif (file_exists($filename.'.m4v')) {
+					$mp4=$src.'.m4v';
+				}
+
+				// WEBM
+				if (file_exists($filename.'.webm')) {
+					$webm=$src.'.webm';
+				}
+
+				// OGG
+				if (file_exists($filename.'.ogg')) {
+					$ogg=$src.'.ogg';
+				} elseif (file_exists($filename.'.ogv')) {
+					$ogg=$src.'.ogv';
+				}
+
+				// FLV
+				if (file_exists($filename.'.flv')) {
+					$flv=$src.'.flv';
+				}
+
+				// WMV
+				if (file_exists($filename.'.wmv')) {
+					$wmv=$src.'.wmv';
+				}				
+				
+				// POSTER
+				if (file_exists($filename.'.jpg')) {
+					$poster=$src.'.jpg';
+				}
+				
+			} elseif ($tagName == 'audio') {
+				
+				// MP3
+				if (file_exists($filename.'.mp3')) {
+					$mp3=$src.'.mp3';
+				}
+				
+				// OGG
+				if (file_exists($filename.'.ogg')) {
+					$ogg=$src.'.ogg';
+				} elseif (file_exists($filename.'.oga')) {
+					$ogg=$src.'.oga';
+				}				
+				
+			}
+		}
+	}	
+	
+	
 
 	if ($mp4) {
 		$mp4_source = '<source src="'.htmlspecialchars($mp4).'" type="'.$tagName.'/mp4" />';
@@ -291,10 +411,21 @@ function mejs_media_shortcode($tagName, $atts){
 	if ($fullscreen == 'true')
 		$controls_option .= ",'fullscreen'";		
 	$controls_option .= "]";
-
+	
+	// AUDIO SIZE
+	$audio_size = '';
+	if ($tagName == 'audio') {
+		$audio_size = ',audioWidth:'.$width.',audioHeight:'.$height;
+	}
+	
+	// VIDEO class (skin)
+	$video_skin_attribute = '';
+	if ($skin != '' && $tagName == 'video') {
+		$video_skin_attribute = 'class="mejs-'.$skin.'"';
+	}
 
 	$mediahtml .= <<<_end_
-	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" {$src_attribute} {$type_attribute} {$width_attribute} {$height_attribute} {$poster_attribute} controls="controls" {$preload_attribute} {$autoplay_attribute}>
+	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" {$src_attribute} {$type_attribute} {$width_attribute} {$height_attribute} {$poster_attribute} controls="controls" {$preload_attribute} {$autoplay_attribute} $video_skin_attribute>
 		{$mp4_source}
 		{$mp3_source}
 		{$webm_source}
@@ -302,7 +433,7 @@ function mejs_media_shortcode($tagName, $atts){
 		{$wmv_source}
 		{$ogg_source}
 		{$captions_source}
-		<object width="320" height="240" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
+		<object width="{$width}" height="{$height}" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
 			<param name="movie" value="{$dir}flashmediaelement.swf" />
 			<param name="flashvars" value="controls=true&amp;file={$flash_src}" />			
 		</object>		
@@ -313,6 +444,7 @@ jQuery(document).ready(function($) {
 		m:1
 		{$loop_option}
 		{$controls_option}
+		{$audio_size}
 	});
 });
 </script>

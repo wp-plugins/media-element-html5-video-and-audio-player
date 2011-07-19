@@ -25,6 +25,12 @@ Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more i
 
 ###  Shortcode Options
 
+= Alternatives =
+If you have a plugin that conflicts with MediaElement.js, you can also use the short codes 
+	
+	[mejsvideo src="http://mysite.com/mymedia.mp4" width="640" height="360"]
+	[mejsaudio src="http://mysite.com/mymedia.mp3"]	
+
 = src =
 This location of any audio or video file
     
@@ -129,6 +135,12 @@ Basic playback options
 All options enabled
 
     [audio mp3="http://mysite.com/mymedia.mp3" ogg="http://mysite.com/mymedia.ogg" preload="true" autoplay="true"]
+
+###  Use in a template
+You can use Wordpress shortcodes in your templates using the do_shortcode function.
+
+	<?php echo do_shortcode('[video src="myvfile.mp4"]'); ?>
+
 
 == Installation ==
 
