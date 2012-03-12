@@ -11,7 +11,7 @@ MediaElement.js is an HTML5 video and audio player with Flash fallback and capti
 == Description ==
 
 Video and audio plugin for WordPress built on the MediaElement.js HTML5 media player library. Provides Flash or Silverlight fallback players for non-HTML5 browsers. Supports iPhone, iPad, and Andriod.
-Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files as well as captions with WebSRT files.
+Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files as well as captions with WebSRT files.  
 
 Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more information and examples.
 
