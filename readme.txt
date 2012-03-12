@@ -4,7 +4,7 @@ Donate link: http://mediaelementjs.com/
 Tags: html5, video, audio, player, flash, mp4, mp3, ogg, webm, wmv, captions, subtitles, websrt, srt, accessible, Silverlight, javascript, 
 Requires at least: 2.8
 Tested up to: 3.3
-Stable tag: 2.5.0
+Stable tag: 2.7.0
 
 MediaElement.js is an HTML5 video and audio player with Flash fallback and captions. Supports IE, Firefox, Opera, Safari, Chrome and iPhone, iPad, Android.
 
@@ -155,6 +155,10 @@ View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more inform
 3. Use the `[video]` or `[audio]` shortcode in your post or page with the options on the front page.
 
 == Changelog ==
+
+= 2.27.0 =
+* Update to 2.7.0 codebase
+* Lots of bug fixes and updates
 
 = 2.2.5 =
 * Update to 2.2.5 codebase
