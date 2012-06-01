@@ -1,7 +1,7 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.7.0
+ * @version 2.9.1
  */
  
 /*
@@ -9,7 +9,7 @@ Plugin Name: MediaElement.js - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: Video and audio plugin for WordPress built on MediaElement.js HTML5 video and audio player library. Embeds media in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.7.0
+Version: 2.9.1
 Author URI: http://j.hn/
 License: GPLv3, MIT
 */
